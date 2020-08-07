@@ -1,0 +1,182 @@
+.secao {
+  float: left;
+  /* width: 33.333%;*/
+  width: 100%;
+}
+
+.mini {
+  float: left;
+  width: 50%;
+}
+
+.container {
+  /* Centralize o conteúdo na tela e defina um tamanho máximo de 1200px. */
+  margin: 0 auto;
+  /* Aproveite e configure alguns espaços gráficos de maneira flexível, usando porcentagens. */
+  max-width: 1200px;
+}
+
+.logo,
+.secao {
+  padding: 0 1%;
+}
+
+/*
+ * Uma técnica simples mas importante em páginas responsivas é evitar que as
+ * imagens estourem os elementos que as contém, no caso de usarmos uma resolução
+ * baixa com uma imagem grande. Atingimos isso com o max-width.
+ */
+img {
+  max-width: 100%;
+}
+
+/*
+  * Queremos configurar o topo do site, que inclui o logotipo, o menu e a busca de
+  * maneira mais flexível. Colocar tudo na mesma linha no Desktop e permitir que,
+  * ao redimensionar, os blocos "escorreguem" para baixo naturalmente. É uma
+  * espécie de adaptação do layout ainda sem media queries, usando inline-block
+  */
+.logo,
+.busca,
+.barra-nav,
+.menu-principal {
+  /* O inline-block é interessante por simular uma linha de texto com seus elementos. 
+    * Se não cabe mais um "caracter" na linha, a "palavra" escorrega pra linha de baixo.
+    */
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.menu-principal li {
+  float: left;
+}
+
+/** Aplique algumas regras com medidas 'em' que são proporcionais ao texto usado. **/
+
+header {
+  padding: 0.5em 0;
+}
+
+.destaques {
+  margin-top: 1em;
+}
+
+.barra-nav {
+  margin: 0.4em 0;
+}
+
+/** 1. Como usamos o layout com medidas 'em', podemos usar media queries para aumentar todas as fontes proporcionalmente em telas maiores. Por exemplo: **/
+/** 2. Dividimos tudo em 3 colunas antes, o que é bom para o Desktop. Mas talvez fosse interessante deixar em 1 coluna em telas pequenas e 2 colunas em telas intermediárias. Use media queries para isso e mobile-first. */
+
+@media (min-width: 600px) {
+  html {
+    font-size: 1.125em;
+  }
+
+  .secao {
+    width: 50%;
+  }
+}
+
+@media (min-width: 1000px) {
+  html {
+    font-size: 1.25em;
+  }
+
+  .secao {
+    width: 33.333%;
+  }
+}
+
+/** No CSS queremos posicionar o menu lateralmente fora da tela. 
+ *  Vamos usar um position:fixed pra isso. E usar transitions para animá-lo
+ * de volta a tela quando estiver ativo (class menu-ativo).
+ */
+@media (max-width: 600px) {
+  .barra-nav {
+    background-color: #f0f0f0;
+    padding: 1em;
+    margin: 0;
+    height: 100%;
+    width: 90%;
+    max-width: 320px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: -90%;
+    transition: left 0.3s ease-out;
+  }
+
+  /** Classe ativada pelo JS*/
+  .menu-ativo .barra-nav {
+    left: 0;
+  }
+
+  .menu-principal li {
+    padding: 1em 0;
+    width: 100%;
+  }
+
+  /** undo cinza na página para obscurecer o conteúdo de fundo quando o menu estiver ativo por cima. 
+   * Uma ideia é fazer isso com pseudo-elemento no <html> quando o menu estiver ativo.
+   */
+  .menu-ativo:after {
+    content: "";
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgb(0, 0, 0, 0.4);
+  }
+}
+
+/** 
+  * No Desktop o menu lateral não é usado, estnão será escondido os botões nessa situação. 
+  * Para isso, usamos display:none nos botões com a media query inversa da anterior:
+  */
+@media not all and (max-width: 600px) {
+  .menu-abrir,
+  .menu-fechar {
+    display: none;
+  }
+}
+
+.menu-abrir,
+.menu-fechar {
+  background: none;
+  border: 0;
+  outline: 0;
+  -webkit-appearance: none;
+  font-size: 1.6em;
+  text-indent: -999em;
+}
+
+.menu-abrir {
+  height: 0;
+  width: 0.75em;
+  padding-top: 0.125em;
+  border-top: 0.375em double #000;
+  border-bottom: 0.125em solid #000;
+
+  vertical-align: middle;
+  margin: 0.5em;
+}
+
+.menu-fechar {
+  position: relative;
+  height: 1em;
+  width: 1em;
+}
+.menu-fechar:before {
+  content: "\00D7";
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-indent: 0;
+}
+
+.logo img {
+  width: 200px;
+}
